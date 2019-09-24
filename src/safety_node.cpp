@@ -10,13 +10,13 @@ class Safety
 public:
     Safety() : nodehandle_(ros::NodeHandle()) ,
                relative_speed_(0.0),
-               threshold_(0.27),
                brake_pub_(nodehandle_.advertise<ackermann_msgs::AckermannDriveStamped>("brake", 100)),
                brake_bool_pub_(nodehandle_.advertise<std_msgs::Bool>("brake_bool", 100)),
                scan_sub_(nodehandle_.subscribe("scan", 100, &Safety::scan_callback, this)),
                odom_sub_(nodehandle_.subscribe("odom", 100, &Safety::odom_callback, this)),
                rate_(60)
     {
+        nodehandle_.getParam("/emergency_braking_threshold", threshold_);
     }
 
     void odom_callback(const nav_msgs::Odometry::ConstPtr &odom_msg)
